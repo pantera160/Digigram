@@ -4,7 +4,9 @@ package be.usgprofessionals.POJOs;
 import be.usgprofessionals.Utils.EID;
 
 /**
- * Created by Pantera on 17/11/15.
+ * Created by Thomas Straetmans on 17/11/15.
+ *
+ * Digigram for USG Professionals
  */
 public class BasicUserProfile {
 

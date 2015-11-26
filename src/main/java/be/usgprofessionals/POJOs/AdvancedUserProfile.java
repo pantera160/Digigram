@@ -2,17 +2,19 @@ package be.usgprofessionals.POJOs;
 
 import be.usgprofessionals.Utils.EID;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 
 /**
- * Created by Pantera on 17/11/15.
+ * Created by Thomas Straetmans on 17/11/15.
+ *
+ * Digigram for USG Professionals
  */
 public class AdvancedUserProfile extends BasicUserProfile {
 
     private ArrayList<Employer> pastEmployers;
     private ArrayList<Skill> skills;
-    private Date birthday;
+    private LocalDate birthday;
     private String email;
     private String tel;
 
@@ -31,7 +33,7 @@ public class AdvancedUserProfile extends BasicUserProfile {
         return skills;
     }
 
-    public Date getBirthday() {
+    public LocalDate getBirthday() {
         return birthday;
     }
 
@@ -51,7 +53,7 @@ public class AdvancedUserProfile extends BasicUserProfile {
         this.skills.add(skill);
     }
 
-    public void setBirthday(Date birthday) {
+    public void setBirthday(LocalDate birthday) {
         this.birthday = birthday;
     }
 

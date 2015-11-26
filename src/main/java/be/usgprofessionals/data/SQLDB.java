@@ -1,7 +1,13 @@
 package be.usgprofessionals.data;
 
+import be.usgprofessionals.Utils.EID;
+
+import java.util.HashMap;
+
 /**
- * Created by Pantera on 20/11/15.
+ * Created by Thomas Straetmans on 20/11/15.
+ *
+ * Digigram for USG Professionals
  */
 public class SQLDB implements Database {
 
@@ -19,5 +25,14 @@ public class SQLDB implements Database {
 
     //Queries will be called using querydsl
 
+
+    public HashMap<String, Object> getBasicUser(EID id){
+
+        return null;
+    }
+
+    public HashMap<String, Object> getAdvancedUser(EID id){
+        return null;
+    }
 
 }

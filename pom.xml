@@ -20,13 +20,7 @@
     </dependency>
     <dependency>
       <groupId>com.mysema.querydsl</groupId>
-      <artifactId>querydsl-apt</artifactId>
-      <version>3.6.9</version>
-    </dependency>
-
-    <dependency>
-      <groupId>com.mysema.querydsl</groupId>
-      <artifactId>querydsl-jdo</artifactId>
+      <artifactId>querydsl-sql</artifactId>
       <version>3.6.9</version>
     </dependency>
 
@@ -35,6 +29,11 @@
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-log4j12</artifactId>
       <version>1.6.1</version>
+    </dependency>
+    <dependency>
+      <groupId>javax</groupId>
+      <artifactId>javaee-web-api</artifactId>
+      <version>7.0</version>
     </dependency>
   </dependencies>
 
@@ -50,25 +49,44 @@
         <artifactId>spring-boot-maven-plugin</artifactId>
       </plugin>
       <plugin>
-        <groupId>com.mysema.maven</groupId>
-        <artifactId>maven-apt-plugin</artifactId>
-        <version>1.0</version>
+        <groupId>com.mysema.querydsl</groupId>
+        <artifactId>querydsl-maven-plugin</artifactId>
+        <version>3.6.9</version>
         <executions>
           <execution>
             <goals>
-              <goal>process</goal>
+              <goal>export</goal>
             </goals>
-            <configuration>
-              <outputDirectory>target/generated-sources/java</outputDirectory>
-              <processor>com.mysema.query.apt.jdo.JDOAnnotationProcessor</processor>
-            </configuration>
           </execution>
         </executions>
+        <configuration>
+          <jdbcDriver>com.mysql.jdbc.Driver</jdbcDriver>
+          <jdbcUrl>jdbc:derby:target/demoDB;create=true</jdbcUrl>
+          <packageName>com.myproject.domain</packageName>
+          <targetFolder>${project.basedir}/target/generated-sources/java</targetFolder>
+        </configuration>
+        <dependencies>
+          <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.25</version>
+          </dependency>
+        </dependencies>
       </plugin>
     </plugins>
   </build>
 
   <repositories>
+    <repository>
+      <id>msource</id>
+      <url>http://source.mysema.com/maven2/releases/</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
     <repository>
       <id>spring-releases</id>
       <url>https://repo.spring.io/libs-release</url>

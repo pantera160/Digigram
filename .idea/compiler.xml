@@ -23,7 +23,6 @@
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
         <module name="Digigram" />
-        <module name="gs-rest-service" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>

@@ -9,7 +9,9 @@ import java.io.IOException;
 import java.util.HashMap;
 
 /**
- * Created by Pantera on 20/11/15.
+ * Created by Thomas Straetmans on 20/11/15.
+ *
+ * Digigram for USG Professionals
  */
 public class SpeakapCalls {
 
@@ -26,7 +28,9 @@ public class SpeakapCalls {
         return uniqueInstance;
     }
 
-    public HashMap<String, Object> getBasicUserInfo(EID eid) throws IOException {
+    //must connect o the app running inside speakap
+    //TODO
+    public HashMap<String, Object> getUserInfo(EID eid) throws IOException {
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<String> response = restTemplate.getForEntity(
                 "https://api.speakap.io/networks/"+networkEID+"/users/"+eid,
@@ -35,9 +39,5 @@ public class SpeakapCalls {
         HashMap<String,Object> result =
                 new ObjectMapper().readValue(response.getBody(), HashMap.class);
         return result;
-    }
-
-    public HashMap<String, Object> getAdvancedUserInfo(EID eid){
-        return null;
     }
 }

@@ -1,19 +1,18 @@
 package be.usgprofessionals.controllers;
 
-import be.usgprofessionals.Exceptions.DAOException;
-import be.usgprofessionals.Exceptions.EIDFormatIncorrectException;
-import be.usgprofessionals.POJOs.*;
+import be.usgprofessionals.POJOs.AdvancedUserProfile;
+import be.usgprofessionals.POJOs.BasicUserProfile;
+import be.usgprofessionals.Utils.DBTYPES;
+import be.usgprofessionals.Utils.DEFAULTS;
 import be.usgprofessionals.Utils.EID;
+import be.usgprofessionals.data.Database;
+import be.usgprofessionals.data.DummyDB;
 import be.usgprofessionals.data.SQLDB;
-import be.usgprofessionals.data.SpeakapCalls;
 
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Properties;
 
 /**
  * Created by Thomas Straetmans on 20/11/15.
@@ -23,72 +22,46 @@ import java.util.*;
 public class DataDAO {
 
     private static DataDAO uniqueInstance;
+    private DBTYPES dbtype;
+    private Database database;
 
     private DataDAO(){
+        Properties prop = new Properties();
+        InputStream is = getClass().getClassLoader().getResourceAsStream("config.properties");
+        try {
+            prop.load(is);
+            dbtype = DBTYPES.fromString(prop.get("dbtype").toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+            dbtype = DEFAULTS.getDbtype();
+        }
+        switch(dbtype){
+            case LOCAL:
+                database = DummyDB.getInstance();
+                break;
+            case MYSQL:
+                database = SQLDB.getInstance();
+                break;
+        }
     }
 
-    public static DataDAO getInstance(){
-        if(uniqueInstance == null){
+    public static DataDAO getInstance() {
+        if (uniqueInstance == null) {
             uniqueInstance = new DataDAO();
         }
+
         return uniqueInstance;
     }
 
-    public BasicUserProfile getBasicFromEID(EID id) throws IOException, EIDFormatIncorrectException, DAOException {
-        HashMap<String, Object> result = SpeakapCalls.getInstance().getUserInfo(id);
-        EID idcheck = new EID(result.get("EID").toString());
-        if(idcheck.equals(id)) {
-            HashMap<String, Object> dbresult = SQLDB.getInstance().getBasicUser(id);
-            String firstname = ((HashMap) result.get("name")).get("firstName").toString();
-            String lastname = ((HashMap) result.get("name")).get("familyName").toString();
-            BasicUserProfile user = new BasicUserProfile(id, firstname, lastname);
-            user.setProfilePicURI(result.get("avatarThumbnailUrl").toString());
-            user.setIntern((boolean) dbresult.get("intern"));
-            user.setEmployer((Employer) dbresult.get("employer"));
-            user.setProject((Project) dbresult.get("project"));
-            user.setUniqueProperty(dbresult.get("property").toString());
-            return user;
-        }
-        else{
-            throw new DAOException("Returned user and requested user do not have same EID.");
-        }
+    public BasicUserProfile getBasicFromEID(EID eid) {
+        return database.getBasicUser(eid);
     }
 
-    @SuppressWarnings("unchecked")
-    public AdvancedUserProfile getAdvancedFromEID(EID id) throws IOException, DAOException, EIDFormatIncorrectException {
-        HashMap<String, Object> result = SpeakapCalls.getInstance().getUserInfo(id);
-        DateTimeFormatter format = DateTimeFormatter.ofPattern("dd/MM/yyyy", Locale.ENGLISH);
-        EID idcheck = new EID(result.get("EID").toString());
-        if(idcheck.equals(id)){
-            HashMap<String, Object> dbresult = SQLDB.getInstance().getAdvancedUser(id);
-            String firstname = ((HashMap) result.get("name")).get("firstName").toString();
-            String lastname = ((HashMap) result.get("name")).get("familyName").toString();
-            String email = getWorkEmail(result);
-            AdvancedUserProfile user = new AdvancedUserProfile(id, firstname, lastname, email);
-            user.setProject((Project) dbresult.get("project"));
-            user.setUniqueProperty(dbresult.get("property").toString());
-            user.setEmployer((Employer) dbresult.get("employer"));
-            user.setIntern((boolean) dbresult.get("intern"));
-            user.setProfilePicURI(result.get("avatarTumbnailUrl").toString());
-            user.setBirthday(LocalDate.parse(result.get("birthday").toString(), format));
-            user.setTel(((ArrayList<HashMap<String, String>>) result.get("telephoneNumbers")).get(0).get("value"));
-            ArrayList<Skill> skills = (ArrayList<Skill>) dbresult.get("skills");
-            skills.forEach(user::addSkills);
-            ArrayList<Employer> pastemployers = (ArrayList<Employer>) dbresult.get("pastemployers");
-            pastemployers.forEach(user::addPastEmployers);
-            return user;
-        }
-        else{
-            throw new DAOException("Returned user and requested user do not have same EID!");
-        }
+    public AdvancedUserProfile getAdvancedFromEID(EID eid) {
+        return database.getAdvancedUser(eid);
     }
 
-    @SuppressWarnings("unchecked")
-    private String getWorkEmail(HashMap<String, Object> map){
-        ArrayList<HashMap<String, String>> emails = (ArrayList<HashMap<String, String>>) map.get("emailAdresses");
-        Optional<HashMap<String, String>> email = emails.stream()
-                .filter(mail -> mail.get("label").equals("Work"))
-                .findFirst();
-        return email.get().get("value");
+    public ArrayList<EID> getMembers(String cc){
+        return database.getMembers(cc);
     }
 }

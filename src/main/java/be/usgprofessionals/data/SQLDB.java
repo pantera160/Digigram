@@ -1,7 +1,11 @@
 package be.usgprofessionals.data;
 
+import be.usgprofessionals.POJOs.AdvancedUserProfile;
+import be.usgprofessionals.POJOs.BasicUserProfile;
+import be.usgprofessionals.POJOs.CC;
 import be.usgprofessionals.Utils.EID;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -26,13 +30,29 @@ public class SQLDB implements Database {
     //Queries will be called using querydsl
 
 
-    public HashMap<String, Object> getBasicUser(EID id){
+    @Override
+    public BasicUserProfile getBasicUser(EID id){
 
         return null;
     }
 
-    public HashMap<String, Object> getAdvancedUser(EID id){
+    @Override
+    public AdvancedUserProfile getAdvancedUser(EID id) {
         return null;
     }
 
+    @Override
+    public String getCC(EID id) {
+        return null;
+    }
+
+    @Override
+    public ArrayList<CC> getAllCCs() {
+        return null;
+    }
+
+    @Override
+    public ArrayList<EID> getMembers(String cc) {
+        return null;
+    }
 }

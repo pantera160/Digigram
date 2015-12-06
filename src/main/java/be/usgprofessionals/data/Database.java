@@ -6,6 +6,7 @@ import be.usgprofessionals.POJOs.CC;
 import be.usgprofessionals.Utils.EID;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by Thomas Straetmans on 20/11/15.
@@ -14,10 +15,11 @@ import java.util.ArrayList;
  */
 public interface Database {
 
-    public BasicUserProfile getBasicUser(EID id);
-    public AdvancedUserProfile getAdvancedUser(EID id);
-    public String getCC(EID id);
-    public ArrayList<CC> getAllCCs();
-    public ArrayList<EID> getMembers(String cc);
-
+    BasicUserProfile getBasicUser(EID id);
+    AdvancedUserProfile getAdvancedUser(EID id);
+    String getCC(EID id);
+    ArrayList<CC> getAllCCs();
+    ArrayList<EID> getMembers(String cc);
+    BasicUserProfile getDeptManager(String dept);
+    HashMap<EID,BasicUserProfile> getDeptMembers(String dept);
 }

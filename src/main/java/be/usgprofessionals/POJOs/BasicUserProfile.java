@@ -5,7 +5,7 @@ import be.usgprofessionals.Utils.EID;
 
 /**
  * Created by Thomas Straetmans on 17/11/15.
- *
+ * <p>
  * Digigram for USG Professionals
  */
 public class BasicUserProfile {
@@ -18,8 +18,10 @@ public class BasicUserProfile {
     private Project project;
     private Employer employer;
     private boolean intern;
+    private CC cc;
+    private EID reportsTo;
 
-    public BasicUserProfile(EID userId, String firstName, String lastName){
+    public BasicUserProfile(EID userId, String firstName, String lastName) {
         this.userId = userId;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -75,5 +77,21 @@ public class BasicUserProfile {
 
     public void setIntern(boolean intern) {
         this.intern = intern;
+    }
+
+    public CC getCc() {
+        return cc;
+    }
+
+    public void setCc(CC cc) {
+        this.cc = cc;
+    }
+
+    public EID getReportsTo() {
+        return reportsTo;
+    }
+
+    public void setReportsTo(EID reportsTo) {
+        this.reportsTo = reportsTo;
     }
 }

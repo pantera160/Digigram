@@ -14,15 +14,28 @@ public class AdvancedUserProfile extends BasicUserProfile {
 
     private ArrayList<Employer> pastEmployers;
     private ArrayList<Skill> skills;
-    private LocalDate birthday;
+    private String birthday;
     private String email;
     private String tel;
 
     public AdvancedUserProfile(EID userId, String firstName, String lastName, String email){
         super(userId, firstName, lastName);
         this.email = email;
-        pastEmployers = new ArrayList<Employer>();
-        skills = new ArrayList<Skill>();
+        pastEmployers = new ArrayList<>();
+        skills = new ArrayList<>();
+    }
+
+    public AdvancedUserProfile(BasicUserProfile basic){
+        super(basic.getUserId(), basic.getFirstName(), basic.getLastName());
+        setProfilePicURI(basic.getProfilePicURI());
+        setEmployer(basic.getEmployer());
+        setUniqueProperty(basic.getUniqueProperty());
+        setProject(basic.getProject());
+        setIntern(basic.isIntern());
+        setCc(basic.getCc());
+        setReportsTo(basic.getReportsTo());
+        pastEmployers = new ArrayList<>();
+        skills = new ArrayList<>();
     }
 
     public ArrayList<Employer> getPastEmployers() {
@@ -33,7 +46,7 @@ public class AdvancedUserProfile extends BasicUserProfile {
         return skills;
     }
 
-    public LocalDate getBirthday() {
+    public String getBirthday() {
         return birthday;
     }
 
@@ -53,11 +66,15 @@ public class AdvancedUserProfile extends BasicUserProfile {
         this.skills.add(skill);
     }
 
-    public void setBirthday(LocalDate birthday) {
+    public void setBirthday(String birthday) {
         this.birthday = birthday;
     }
 
     public void setTel(String tel) {
         this.tel = tel;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

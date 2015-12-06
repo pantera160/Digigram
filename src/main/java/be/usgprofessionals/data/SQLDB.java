@@ -55,4 +55,14 @@ public class SQLDB implements Database {
     public ArrayList<EID> getMembers(String cc) {
         return null;
     }
+
+    @Override
+    public BasicUserProfile getDeptManager(String dept) {
+        return null;
+    }
+
+    @Override
+    public HashMap<EID, BasicUserProfile> getDeptMembers(String dept) {
+        return null;
+    }
 }

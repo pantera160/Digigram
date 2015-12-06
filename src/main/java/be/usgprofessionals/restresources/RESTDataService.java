@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.ws.rs.core.MediaType;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -46,9 +47,14 @@ public class RESTDataService {
         }
     }
 
-    @RequestMapping("/ccmembers/{cc}")
-    public ArrayList<EID> getMembers(@PathVariable("cc") String cc) {
-        return DataDAO.getInstance().getMembers(cc);
+    @RequestMapping("/deptmanager/{dept}")
+    public BasicUserProfile getDeptManager(@PathVariable String dept){
+        return DataDAO.getInstance().getDeptManager(dept);
+    }
+
+    @RequestMapping(value="/ccmembers/{cc}", produces = {"application/json"})
+    public HashMap<EID, BasicUserProfile> getMembers(@PathVariable("cc") String cc) {
+        return DataDAO.getInstance().getDeptMembers(cc);
     }
 
     public ArrayList<String> getCCs(){

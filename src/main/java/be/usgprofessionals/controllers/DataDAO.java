@@ -12,6 +12,7 @@ import be.usgprofessionals.data.SQLDB;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Properties;
 
 /**
@@ -63,5 +64,13 @@ public class DataDAO {
 
     public ArrayList<EID> getMembers(String cc){
         return database.getMembers(cc);
+    }
+
+    public BasicUserProfile getDeptManager(String dept) {
+        return database.getDeptManager(dept);
+    }
+
+    public HashMap<EID, BasicUserProfile> getDeptMembers(String dept) {
+        return database.getDeptMembers(dept);
     }
 }

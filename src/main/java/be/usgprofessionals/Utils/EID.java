@@ -21,4 +21,18 @@ public class EID {
     public String getId() {
         return this.id;
     }
+
+    public boolean equals(Object o){
+        if(o instanceof EID){
+            if(((EID) o).getId().equals(id)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
 }

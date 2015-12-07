@@ -2,7 +2,6 @@ package be.usgprofessionals.POJOs;
 
 import be.usgprofessionals.Utils.EID;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 
 /**
@@ -34,6 +33,7 @@ public class AdvancedUserProfile extends BasicUserProfile {
         setIntern(basic.isIntern());
         setCc(basic.getCc());
         setReportsTo(basic.getReportsTo());
+        setNextDept(basic.getNextDept());
         pastEmployers = new ArrayList<>();
         skills = new ArrayList<>();
     }

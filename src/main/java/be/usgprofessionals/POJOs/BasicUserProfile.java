@@ -20,6 +20,7 @@ public class BasicUserProfile {
     private boolean intern;
     private CC cc;
     private EID reportsTo;
+    private String nextDept;
 
     public BasicUserProfile(EID userId, String firstName, String lastName) {
         this.userId = userId;
@@ -93,5 +94,13 @@ public class BasicUserProfile {
 
     public void setReportsTo(EID reportsTo) {
         this.reportsTo = reportsTo;
+    }
+
+    public String getNextDept() {
+        return nextDept;
+    }
+
+    public void setNextDept(String nextDept) {
+        this.nextDept = nextDept;
     }
 }

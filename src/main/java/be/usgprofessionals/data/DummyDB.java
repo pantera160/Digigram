@@ -5,13 +5,9 @@ import be.usgprofessionals.POJOs.*;
 import be.usgprofessionals.Utils.EID;
 
 import javax.el.MethodNotFoundException;
-import javax.persistence.Basic;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 /**
@@ -102,7 +98,7 @@ public class DummyDB implements Database {
         HashMap<EID, BasicUserProfile> db = employees;
         //Create user 1 (Thomas Straetmans)
         BasicUserProfile user1 = new BasicUserProfile(new EID("12345abcde6789ts"), "Thomas", "Straetmans");
-        user1.setProfilePicURI("thomasstraetmans.png");
+        user1.setProfilePicURI("https://usgprofessionalsbe.speakap.com/files/15240855ef0c7354/profile-image");
         user1.setUniqueProperty("fun");
         user1.setIntern(true);
         Project project = new Project("Digigram");
@@ -134,6 +130,7 @@ public class DummyDB implements Database {
         user2.setEmployer(employer2);
         user2.setProject(proj);
         user2.setCc(new CC("ICT", new EID("12345abcde6789tl")));
+        user2.setNextDept("ICT");
         db.put(new EID("12345abcde6789tl"), user2);
         AdvancedUserProfile user2Adv = new AdvancedUserProfile(user2);
         user2Adv.setEmail("tom.lecluyse@usgict.be");
@@ -152,6 +149,7 @@ public class DummyDB implements Database {
         user3.setReportsTo(new EID("12345abcde6789tl"));
         user3.setEmployer(employer3);
         user3.setProject(proj);
+        user3.setNextDept("DevCC");
         user3.setCc(new CC("ICT", new EID("12345abcde6789tl")));
         db.put(new EID("12345abcde6789nh"), user3);
         AdvancedUserProfile user3Adv = new AdvancedUserProfile(user3);
@@ -229,7 +227,8 @@ public class DummyDB implements Database {
         deptsAndCCs.put(cc.getName(), cc);
         cc = new CC("ICT", new EID("12345abcde6789tl"));
         deptsAndCCs.put(cc.getName(), cc);
-
+        cc = new CC("BACC", new EID("12345abcde6789fl"));
+        deptsAndCCs.put(cc.getName(), cc);
 
     }
 }

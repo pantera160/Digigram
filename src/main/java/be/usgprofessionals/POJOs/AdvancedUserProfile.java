@@ -31,7 +31,7 @@ public class AdvancedUserProfile extends BasicUserProfile {
         setUniqueProperty(basic.getUniqueProperty());
         setProject(basic.getProject());
         setIntern(basic.isIntern());
-        setCc(basic.getCc());
+        setDept(basic.getDept());
         setReportsTo(basic.getReportsTo());
         setNextDept(basic.getNextDept());
         pastEmployers = new ArrayList<>();

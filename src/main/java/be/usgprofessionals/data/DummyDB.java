@@ -109,7 +109,7 @@ public class DummyDB implements Database {
         Employer employer = new Employer("USG Professionals");
         user1.setEmployer(employer);
         user1.setReportsTo(new EID("12345abcde6789nh"));
-        user1.setCc(new CC("DevCC", new EID("12345abcde6789nh")));
+        user1.setDept(new CC("DevCC", new EID("12345abcde6789nh")));
         db.put(new EID("12345abcde6789ts"), user1);
         AdvancedUserProfile user1Adv = new AdvancedUserProfile(user1);
         user1Adv.addSkills(new Skill("Java", "Development"));
@@ -129,7 +129,7 @@ public class DummyDB implements Database {
         user2.setReportsTo(new EID("12345abcde6789nc"));
         user2.setEmployer(employer2);
         user2.setProject(proj);
-        user2.setCc(new CC("ICT", new EID("12345abcde6789tl")));
+        user2.setDept(new CC("ICT", new EID("12345abcde6789tl")));
         user2.setNextDept("ICT");
         db.put(new EID("12345abcde6789tl"), user2);
         AdvancedUserProfile user2Adv = new AdvancedUserProfile(user2);
@@ -150,7 +150,7 @@ public class DummyDB implements Database {
         user3.setEmployer(employer3);
         user3.setProject(proj);
         user3.setNextDept("DevCC");
-        user3.setCc(new CC("ICT", new EID("12345abcde6789tl")));
+        user3.setDept(new CC("ICT", new EID("12345abcde6789tl")));
         db.put(new EID("12345abcde6789nh"), user3);
         AdvancedUserProfile user3Adv = new AdvancedUserProfile(user3);
         user3Adv.setEmail("nadine.hermans@usgict.be");
@@ -170,7 +170,7 @@ public class DummyDB implements Database {
         user4.setReportsTo(new EID("12345abcde6789tl"));
         user4.setEmployer(employer4);
         user4.setProject(proj);
-        user4.setCc(new CC("ICT", new EID("12345abcde6789tl")));
+        user4.setDept(new CC("ICT", new EID("12345abcde6789tl")));
         db.put(new EID("12345abcde6789gs"), user4);
         AdvancedUserProfile user4Adv = new AdvancedUserProfile(user4);
         user4Adv.setEmail("guy.vandersande@ext.usgict.be");
@@ -190,7 +190,7 @@ public class DummyDB implements Database {
         user5.setReportsTo(new EID("12345abcde6789tl"));
         user5.setEmployer(employer5);
         user5.setProject(proj5);
-        user5.setCc(new CC("ICT", new EID("12345abcde6789tl")));
+        user5.setDept(new CC("ICT", new EID("12345abcde6789tl")));
         db.put(new EID("12345abcde6789rk"), user5);
         AdvancedUserProfile user5Adv = new AdvancedUserProfile(user5);
         user5Adv.setEmail("raf.dekeersmaecker@usgict.be");
@@ -210,7 +210,7 @@ public class DummyDB implements Database {
         user6.setReportsTo(new EID("12345abcde6789tl"));
         user6.setEmployer(employer5);
         user6.setProject(proj5);
-        user6.setCc(new CC("ICT", new EID("12345abcde6789tl")));
+        user6.setDept(new CC("ICT", new EID("12345abcde6789tl")));
         db.put(new EID("12345abcde6789fl"), user6);
         AdvancedUserProfile user6Adv = new AdvancedUserProfile(user6);
         user6Adv.setEmail("jean-francois.leys@ext.usgict.be");

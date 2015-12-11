@@ -18,7 +18,7 @@ public class BasicUserProfile {
     private Project project;
     private Employer employer;
     private boolean intern;
-    private CC cc;
+    private CC dept;
     private EID reportsTo;
     private String nextDept;
 
@@ -80,12 +80,12 @@ public class BasicUserProfile {
         this.intern = intern;
     }
 
-    public CC getCc() {
-        return cc;
+    public CC getDept() {
+        return dept;
     }
 
-    public void setCc(CC cc) {
-        this.cc = cc;
+    public void setDept(CC dept) {
+        this.dept = dept;
     }
 
     public EID getReportsTo() {

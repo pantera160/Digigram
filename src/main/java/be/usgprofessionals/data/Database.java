@@ -1,5 +1,6 @@
 package be.usgprofessionals.data;
 
+import be.usgprofessionals.Exceptions.EIDFormatIncorrectException;
 import be.usgprofessionals.POJOs.AdvancedUserProfile;
 import be.usgprofessionals.POJOs.BasicUserProfile;
 import be.usgprofessionals.POJOs.CC;
@@ -15,11 +16,11 @@ import java.util.HashMap;
  */
 public interface Database {
 
-    BasicUserProfile getBasicUser(EID id);
-    AdvancedUserProfile getAdvancedUser(EID id);
+    BasicUserProfile getBasicUser(EID id) throws EIDFormatIncorrectException;
+    AdvancedUserProfile getAdvancedUser(EID id) throws EIDFormatIncorrectException;
     String getCC(EID id);
-    ArrayList<CC> getAllCCs();
-    ArrayList<EID> getMembers(String cc);
-    BasicUserProfile getDeptManager(String dept);
+    ArrayList<CC> getAllCCs() throws EIDFormatIncorrectException;
+    ArrayList<EID> getMembers(String cc) throws EIDFormatIncorrectException;
+    BasicUserProfile getDeptManager(String dept) throws EIDFormatIncorrectException;
     HashMap<EID,BasicUserProfile> getDeptMembers(String dept);
 }

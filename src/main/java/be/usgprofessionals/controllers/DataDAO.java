@@ -1,5 +1,6 @@
 package be.usgprofessionals.controllers;
 
+import be.usgprofessionals.Exceptions.EIDFormatIncorrectException;
 import be.usgprofessionals.POJOs.AdvancedUserProfile;
 import be.usgprofessionals.POJOs.BasicUserProfile;
 import be.usgprofessionals.Utils.DBTYPES;
@@ -9,7 +10,6 @@ import be.usgprofessionals.data.Database;
 import be.usgprofessionals.data.DummyDB;
 import be.usgprofessionals.data.SQLDB;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,7 +17,7 @@ import java.util.Properties;
 
 /**
  * Created by Thomas Straetmans on 20/11/15.
- *
+ * <p>
  * Digigram for USG Professionals
  */
 public class DataDAO {
@@ -26,7 +26,7 @@ public class DataDAO {
     private DBTYPES dbtype;
     private Database database;
 
-    private DataDAO(){
+    private DataDAO() {
         Properties prop = new Properties();
         InputStream is = getClass().getClassLoader().getResourceAsStream("config.properties");
         try {
@@ -36,7 +36,7 @@ public class DataDAO {
             e.printStackTrace();
             dbtype = DEFAULTS.getDbtype();
         }
-        switch(dbtype){
+        switch (dbtype) {
             case LOCAL:
                 database = DummyDB.getInstance();
                 break;
@@ -54,19 +54,19 @@ public class DataDAO {
         return uniqueInstance;
     }
 
-    public BasicUserProfile getBasicFromEID(EID eid) {
+    public BasicUserProfile getBasicFromEID(EID eid) throws EIDFormatIncorrectException {
         return database.getBasicUser(eid);
     }
 
-    public AdvancedUserProfile getAdvancedFromEID(EID eid) {
+    public AdvancedUserProfile getAdvancedFromEID(EID eid) throws EIDFormatIncorrectException {
         return database.getAdvancedUser(eid);
     }
 
-    public ArrayList<EID> getMembers(String cc){
+    public ArrayList<EID> getMembers(String cc) throws EIDFormatIncorrectException {
         return database.getMembers(cc);
     }
 
-    public BasicUserProfile getDeptManager(String dept) {
+    public BasicUserProfile getDeptManager(String dept) throws EIDFormatIncorrectException {
         return database.getDeptManager(dept);
     }
 

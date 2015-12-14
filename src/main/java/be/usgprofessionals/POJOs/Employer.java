@@ -2,7 +2,7 @@ package be.usgprofessionals.POJOs;
 
 /**
  * Created by Thomas Straetmans on 17/11/15.
- *
+ * <p>
  * Digigram for USG Professionals
  */
 public class Employer {
@@ -11,8 +11,14 @@ public class Employer {
     private String adress;
     private String city;
 
-    public Employer(String name){
+    public Employer(String name) {
         this.name = name;
+    }
+
+    public Employer(String name, String city, String adress) {
+        this.name = name;
+        this.city = city;
+        this.adress = adress;
     }
 
     public String getName() {
@@ -27,7 +33,7 @@ public class Employer {
         return city;
     }
 
-    public void setLocation(String adress, String city){
+    public void setLocation(String adress, String city) {
         this.adress = adress;
         this.city = city;
     }

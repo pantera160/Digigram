@@ -172,6 +172,7 @@ public class SQLDB implements Database {
         List<String> result = query
                 .from(quser, qdept)
                 .where(quser.deptId.eq(qdept.deptId))
+                .where(quser.userId.eq(id.getId()))
                 .list(qdept.deptName);
         if (result.size() > 0)
             return result.get(0);
@@ -235,6 +236,25 @@ public class SQLDB implements Database {
 
     @Override
     public HashMap<EID, BasicUserProfile> getDeptMembers(String dept) {
-        return null;
+        SQLQuery query = createConnectionQuery();
+        QUsers qusers = new QUsers("u");
+        QDepartments qdept = new QDepartments("d");
+        List<String> result = query
+                .from(qusers, qdept)
+                .where(qusers.deptId.eq(qdept.deptId))
+                .where(qdept.deptName.eq(dept))
+                .list(qusers.userId);
+
+        HashMap<EID, BasicUserProfile> map = new HashMap<>();
+        result.forEach(l -> {
+            try {
+                EID id = new EID(l);
+                BasicUserProfile user = getBasicUser(id);
+                map.put(id, user);
+            } catch (EIDFormatIncorrectException e) {
+                e.printStackTrace();
+            }
+        });
+        return map;
     }
 }

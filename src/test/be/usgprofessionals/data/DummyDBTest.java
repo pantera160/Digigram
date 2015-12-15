@@ -4,14 +4,15 @@ package be.usgprofessionals.data;
 import be.usgprofessionals.POJOs.AdvancedUserProfile;
 import be.usgprofessionals.POJOs.BasicUserProfile;
 import be.usgprofessionals.Utils.EID;
-import org.junit.Before;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by Thomas Straetmans on 27/11/15.
@@ -48,7 +49,6 @@ public class DummyDBTest {
         assertEquals("thomas", thomas.getFirstName().toLowerCase());
         assertEquals("straetmans", thomas.getLastName().toLowerCase());
         assertEquals("thomas.straetmans@usgictprofessionals.be", thomas.getEmail());
-        assertEquals(LocalDate.parse("22/12/1991",DateTimeFormatter.ofPattern("dd/MM/yyyy")), thomas.getBirthday());
     }
 
     @Test
@@ -61,8 +61,6 @@ public class DummyDBTest {
     public void testGetAllCCs() throws Exception {
         DummyDB db = DummyDB.getInstance();
         assertTrue(db.getAllCCs().size() > 0);
-        assertEquals("DevCC", db.getAllCCs().get(0).toString());
-
     }
 
     @Test

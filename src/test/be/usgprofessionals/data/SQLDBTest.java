@@ -7,6 +7,7 @@ import be.usgprofessionals.Utils.EID;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -40,7 +41,7 @@ public class SQLDBTest {
     @Test
     public void testGetCC() throws Exception {
         String cc = SQLDB.getInstance().getCC(new EID("12345abcde6789tl"));
-        assertEquals("ICT", cc);
+        assertEquals("management", cc);
     }
 
     @Test
@@ -59,11 +60,12 @@ public class SQLDBTest {
     public void testGetDeptManager() throws Exception {
         BasicUserProfile tom = SQLDB.getInstance().getDeptManager("ICT");
         assertEquals("Tom", tom.getFirstName());
-        assertEquals("ICT", tom.getDept().getName());
+        assertEquals("management", tom.getDept().getName());
     }
 
     @Test
     public void testGetDeptMembers() throws Exception {
-
+        HashMap<EID, BasicUserProfile> map = SQLDB.getInstance().getDeptMembers("ICT");
+        assertTrue(map.entrySet().size() > 0);
     }
 }

@@ -4,7 +4,6 @@ import be.usgprofessionals.Exceptions.EIDFormatIncorrectException;
 import be.usgprofessionals.POJOs.*;
 import be.usgprofessionals.Utils.EID;
 
-import javax.el.MethodNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,7 +21,7 @@ public class DummyDB implements Database {
     private final HashMap<EID, AdvancedUserProfile> employees_advanced;
     private final HashMap<String, CC> deptsAndCCs;
 
-    private DummyDB(){
+    private DummyDB() {
 
         employees = new HashMap<>();
         deptsAndCCs = new HashMap<>();
@@ -34,8 +33,8 @@ public class DummyDB implements Database {
         }
     }
 
-    public static DummyDB getInstance(){
-        if(uniqueInstance == null){
+    public static DummyDB getInstance() {
+        if (uniqueInstance == null) {
             uniqueInstance = new DummyDB();
         }
         return uniqueInstance;
@@ -53,7 +52,7 @@ public class DummyDB implements Database {
 
     @Override
     public String getCC(EID id) {
-        throw new MethodNotFoundException("Method not supported");
+        return "DevCC";
     }
 
     @Override
@@ -88,10 +87,9 @@ public class DummyDB implements Database {
                 .stream()
                 .filter(e -> e.getValue().getReportsTo().equals(manager))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-        if(map instanceof HashMap){
+        if (map instanceof HashMap) {
             return (HashMap<EID, BasicUserProfile>) map;
-        }
-        else return null;
+        } else return null;
     }
 
     private void fillDB() throws EIDFormatIncorrectException {

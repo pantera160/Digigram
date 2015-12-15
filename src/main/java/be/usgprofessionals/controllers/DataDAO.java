@@ -3,6 +3,7 @@ package be.usgprofessionals.controllers;
 import be.usgprofessionals.Exceptions.EIDFormatIncorrectException;
 import be.usgprofessionals.POJOs.AdvancedUserProfile;
 import be.usgprofessionals.POJOs.BasicUserProfile;
+import be.usgprofessionals.POJOs.Employer;
 import be.usgprofessionals.Utils.DBTYPES;
 import be.usgprofessionals.Utils.DEFAULTS;
 import be.usgprofessionals.Utils.EID;
@@ -72,5 +73,13 @@ public class DataDAO {
 
     public HashMap<EID, BasicUserProfile> getDeptMembers(String dept) {
         return database.getDeptMembers(dept);
+    }
+
+    public Employer getEmployer(String employername) {
+        return database.getEmployer(employername);
+    }
+
+    public HashMap<EID, BasicUserProfile> getCompanyEmployees(String companyname){
+        return database.getCompanyEmployees(companyname);
     }
 }

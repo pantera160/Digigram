@@ -3,6 +3,7 @@ package be.usgprofessionals.restresources;
 import be.usgprofessionals.Exceptions.EIDFormatIncorrectException;
 import be.usgprofessionals.POJOs.AdvancedUserProfile;
 import be.usgprofessionals.POJOs.BasicUserProfile;
+import be.usgprofessionals.POJOs.Employer;
 import be.usgprofessionals.Utils.EID;
 import be.usgprofessionals.controllers.DataDAO;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -76,6 +77,16 @@ public class RESTDataService {
         testmap.put("what?", "a test");
         testmap.put("seems", "it worked");
         return testmap;
+    }
+
+    @RequestMapping("/company/{employername}")
+    public Employer getEmployer(@PathVariable("employername") String employername) {
+        return DataDAO.getInstance().getEmployer(employername);
+    }
+
+    @RequestMapping("/companyemployees/{companyname}")
+    public HashMap<EID, BasicUserProfile> getCompanyEmployees(@PathVariable("companyname") String companyname){
+        return DataDAO.getInstance().getCompanyEmployees(companyname);
     }
 
 

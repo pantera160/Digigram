@@ -72,9 +72,9 @@
                 </executions>
                 <configuration>
                     <jdbcDriver>com.mysql.jdbc.Driver</jdbcDriver>
-                    <jdbcUrl>jdbc:mysql://localhost:3306/DIGIGRAM</jdbcUrl>
-                    <jdbcUser>Pantera</jdbcUser>
-                    <jdbcPassword>pantera</jdbcPassword>
+                    <jdbcUrl>jdbc:mysql://wide.synology.me:3306/Digigram</jdbcUrl>
+                    <jdbcUser>pantera</jdbcUser>
+                    <jdbcPassword>pantsy123</jdbcPassword>
                     <packageName>be.usgprofessionals</packageName>
                     <targetFolder>${project.basedir}/target/generated-sources/java</targetFolder>
                 </configuration>

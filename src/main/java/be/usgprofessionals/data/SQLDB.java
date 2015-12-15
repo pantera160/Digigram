@@ -84,7 +84,7 @@ public class SQLDB implements Database {
                 .leftJoin(qdept2).on(qdept2.deptId.eq(quser.nextDeptId))
                 .where(quser.userId.eq(id.getId()))
                 .list(quser.firstName, quser.lastName, quser.intern, quser.profilePicURI, quser.uniqueProperty, quser.reportsTo, qEmployer.name, qEmployer.adress,
-                        qEmployer.city, qdept.deptName, qdept.managerId, qdept2.deptName, qProject.name, qProject.projectId);
+                        qEmployer.city, qEmployer.iconURI, qdept.deptName, qdept.managerId, qdept2.deptName, qProject.name, qProject.projectId);
 
         Tuple t = results.get(0);
 
@@ -93,7 +93,7 @@ public class SQLDB implements Database {
         basicUserProfile.setProfilePicURI(t.get(quser.profilePicURI));
         Project proj = new Project(t.get(qProject.name));
         basicUserProfile.setProject(proj);
-        Employer empl = new Employer(t.get(qEmployer.name), t.get(qEmployer.adress), t.get(qEmployer.city));
+        Employer empl = new Employer(t.get(qEmployer.name), t.get(qEmployer.adress), t.get(qEmployer.city), t.get(qEmployer.iconURI));
         basicUserProfile.setIntern(t.get(quser.intern));
         basicUserProfile.setEmployer(empl);
         basicUserProfile.setDept(new CC(t.get(qdept.deptName), new EID(t.get(qdept.managerId))));
@@ -131,7 +131,7 @@ public class SQLDB implements Database {
                 .leftJoin(qdept2).on(qdept2.deptId.eq(quser.nextDeptId))
                 .where(quser.userId.eq(id.getId()))
                 .list(quser.firstName, quser.lastName, quser.intern, quser.profilePicURI, quser.uniqueProperty, quser.reportsTo, quser.email, quser.birthday, quser.tel, qEmployer.name, qEmployer.adress,
-                        qEmployer.city, qdept.deptName, qdept.managerId, qdept2.deptName, qProject.name, qProject.projectId);
+                        qEmployer.city, qEmployer.iconURI, qdept.deptName, qdept.managerId, qdept2.deptName, qProject.name, qProject.projectId);
         if (results.size() > 0) {
             Tuple t = results.get(0);
 
@@ -140,7 +140,7 @@ public class SQLDB implements Database {
             advancedUserProfile.setProfilePicURI(t.get(quser.profilePicURI));
             Project proj = new Project(t.get(qProject.name));
             advancedUserProfile.setProject(proj);
-            Employer empl = new Employer(t.get(qEmployer.name), t.get(qEmployer.adress), t.get(qEmployer.city));
+            Employer empl = new Employer(t.get(qEmployer.name), t.get(qEmployer.adress), t.get(qEmployer.city), t.get(qEmployer.iconURI));
             advancedUserProfile.setIntern(t.get(quser.intern));
             advancedUserProfile.setEmployer(empl);
             advancedUserProfile.setDept(new CC(t.get(qdept.deptName), new EID(t.get(qdept.managerId))));
@@ -243,12 +243,56 @@ public class SQLDB implements Database {
                 .from(qusers, qdept)
                 .where(qusers.deptId.eq(qdept.deptId))
                 .where(qdept.deptName.eq(dept))
+                .orderBy(qusers.lastName.asc())
                 .list(qusers.userId);
 
         HashMap<EID, BasicUserProfile> map = new HashMap<>();
         result.forEach(l -> {
             try {
                 EID id = new EID(l);
+                BasicUserProfile user = getBasicUser(id);
+                map.put(id, user);
+            } catch (EIDFormatIncorrectException e) {
+                e.printStackTrace();
+            }
+        });
+        return map;
+    }
+
+    @Override
+    public Employer getEmployer(String employername) {
+        SQLQuery query = createConnectionQuery();
+        QEmployer qEmployer = new QEmployer("e");
+        List<Tuple> result = query
+                .from(qEmployer)
+                .where(qEmployer.name.eq(employername))
+                .list(qEmployer.name, qEmployer.adress, qEmployer.city, qEmployer.iconURI);
+
+        if (result.size() > 0) {
+            Tuple t = result.get(0);
+            return new Employer(t.get(qEmployer.name), t.get(qEmployer.city), t.get(qEmployer.adress), t.get(qEmployer.iconURI));
+
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public HashMap<EID, BasicUserProfile> getCompanyEmployees(String companyname) {
+        SQLQuery query = createConnectionQuery();
+        QUsers qusers = new QUsers("u");
+        QEmployer qEmployer = new QEmployer("e");
+        List<String> result = query
+                .from(qusers, qEmployer)
+                .where(qusers.employerId.eq(qEmployer.employerId))
+                .where(qEmployer.name.eq(companyname))
+                .orderBy(qusers.lastName.asc())
+                .list(qusers.userId);
+
+        HashMap<EID, BasicUserProfile> map = new HashMap<>();
+        result.forEach(d -> {
+            try {
+                EID id = new EID(d);
                 BasicUserProfile user = getBasicUser(id);
                 map.put(id, user);
             } catch (EIDFormatIncorrectException e) {

@@ -92,6 +92,16 @@ public class DummyDB implements Database {
         } else return null;
     }
 
+    @Override
+    public Employer getEmployer(String Employername) {
+        return null;
+    }
+
+    @Override
+    public HashMap<EID, BasicUserProfile> getCompanyEmployees(String companyname) {
+        return null;
+    }
+
     private void fillDB() throws EIDFormatIncorrectException {
         HashMap<EID, BasicUserProfile> db = employees;
         //Create user 1 (Thomas Straetmans)

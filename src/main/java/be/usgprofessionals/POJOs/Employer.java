@@ -10,15 +10,17 @@ public class Employer {
     private String name;
     private String adress;
     private String city;
+    private String iconURI;
 
     public Employer(String name) {
         this.name = name;
     }
 
-    public Employer(String name, String city, String adress) {
+    public Employer(String name, String city, String adress, String iconURI) {
         this.name = name;
         this.city = city;
         this.adress = adress;
+        this.iconURI = iconURI;
     }
 
     public String getName() {
@@ -36,5 +38,9 @@ public class Employer {
     public void setLocation(String adress, String city) {
         this.adress = adress;
         this.city = city;
+    }
+
+    public String getIconURI() {
+        return iconURI;
     }
 }

@@ -68,4 +68,10 @@ public class SQLDBTest {
         HashMap<EID, BasicUserProfile> map = SQLDB.getInstance().getDeptMembers("ICT");
         assertTrue(map.entrySet().size() > 0);
     }
+
+    @Test
+    public void testSearchWithExistingDataReturnsResult() throws Exception {
+        ArrayList<BasicUserProfile> list = SQLDB.getInstance().search("tho");
+        assertEquals(list.get(0).getFirstName(), "Thomas");
+    }
 }

@@ -71,7 +71,7 @@ public class DataDAO {
         return database.getDeptManager(dept);
     }
 
-    public HashMap<EID, BasicUserProfile> getDeptMembers(String dept) {
+    public HashMap<EID, BasicUserProfile> getDeptMembers(String dept) throws EIDFormatIncorrectException {
         return database.getDeptMembers(dept);
     }
 
@@ -79,7 +79,11 @@ public class DataDAO {
         return database.getEmployer(employername);
     }
 
-    public HashMap<EID, BasicUserProfile> getCompanyEmployees(String companyname){
+    public HashMap<EID, BasicUserProfile> getCompanyEmployees(String companyname) throws EIDFormatIncorrectException {
         return database.getCompanyEmployees(companyname);
+    }
+
+    public ArrayList<BasicUserProfile> search(String searchstring){
+        return database.search(searchstring);
     }
 }

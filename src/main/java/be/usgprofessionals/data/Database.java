@@ -29,9 +29,11 @@ public interface Database {
 
     BasicUserProfile getDeptManager(String dept) throws EIDFormatIncorrectException;
 
-    HashMap<EID, BasicUserProfile> getDeptMembers(String dept);
+    HashMap<EID, BasicUserProfile> getDeptMembers(String dept) throws EIDFormatIncorrectException;
 
     Employer getEmployer(String employername);
 
-    HashMap<EID, BasicUserProfile> getCompanyEmployees(String companyname);
+    HashMap<EID, BasicUserProfile> getCompanyEmployees(String companyname) throws EIDFormatIncorrectException;
+
+    ArrayList<BasicUserProfile> search(String searchstring);
 }

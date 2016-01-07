@@ -4,6 +4,7 @@ import be.usgprofessionals.Exceptions.EIDFormatIncorrectException;
 import be.usgprofessionals.POJOs.*;
 import be.usgprofessionals.*;
 import be.usgprofessionals.Utils.EID;
+import com.mysema.query.BooleanBuilder;
 import com.mysema.query.Tuple;
 import com.mysema.query.sql.MySQLTemplates;
 import com.mysema.query.sql.SQLQuery;
@@ -73,8 +74,6 @@ public class SQLDB implements Database {
         QDepartments qdept = new QDepartments("d");
         QDepartments qdept2 = new QDepartments("d2");
         QProject qProject = new QProject("p");
-        QSkill qSkill = new QSkill("s");
-        QProjectSkills qProjectSkills = new QProjectSkills("qps");
         SQLQuery query = createConnectionQuery();
         List<Tuple> results = query
                 .from(quser)
@@ -83,34 +82,11 @@ public class SQLDB implements Database {
                 .join(qProject).on(qProject.projectId.eq(quser.projectId))
                 .leftJoin(qdept2).on(qdept2.deptId.eq(quser.nextDeptId))
                 .where(quser.userId.eq(id.getId()))
-                .list(quser.firstName, quser.lastName, quser.intern, quser.profilePicURI, quser.uniqueProperty, quser.reportsTo, qEmployer.name, qEmployer.adress,
+                .list(quser.userId, quser.firstName, quser.lastName, quser.intern, quser.profilePicURI, quser.uniqueProperty, quser.reportsTo, qEmployer.name, qEmployer.adress,
                         qEmployer.city, qEmployer.iconURI, qdept.deptName, qdept.managerId, qdept2.deptName, qProject.name, qProject.projectId);
 
         Tuple t = results.get(0);
-
-        BasicUserProfile basicUserProfile = new BasicUserProfile(id, t.get(quser.firstName), t.get(quser.lastName));
-        basicUserProfile.setUniqueProperty(t.get(quser.uniqueProperty));
-        basicUserProfile.setProfilePicURI(t.get(quser.profilePicURI));
-        Project proj = new Project(t.get(qProject.name));
-        basicUserProfile.setProject(proj);
-        Employer empl = new Employer(t.get(qEmployer.name), t.get(qEmployer.adress), t.get(qEmployer.city), t.get(qEmployer.iconURI));
-        basicUserProfile.setIntern(t.get(quser.intern));
-        basicUserProfile.setEmployer(empl);
-        basicUserProfile.setDept(new CC(t.get(qdept.deptName), new EID(t.get(qdept.managerId))));
-        basicUserProfile.setReportsTo(new EID(t.get(quser.reportsTo)));
-        basicUserProfile.setNextDept(t.get(qdept2.deptName));
-
-        List<Tuple> results2 = query
-                .from(qSkill, qProjectSkills)
-                .where(qProjectSkills.projectId.eq(t.get(qProject.projectId)))
-                .where(qSkill.skillId.eq(qProjectSkills.skillId))
-                .list(qSkill.name, qSkill.area);
-
-        for (Tuple t2 : results2) {
-            basicUserProfile.getProject().addSkill(new Skill(t2.get(qSkill.name), t2.get(qSkill.area)));
-        }
-
-        return basicUserProfile;
+        return tupleToBasicUser(t);
     }
 
     @Override
@@ -120,8 +96,6 @@ public class SQLDB implements Database {
         QDepartments qdept = new QDepartments("d");
         QDepartments qdept2 = new QDepartments("d2");
         QProject qProject = new QProject("p");
-        QSkill qSkill = new QSkill("s");
-        QProjectSkills qProjectSkills = new QProjectSkills("qps");
         SQLQuery query = createConnectionQuery();
         List<Tuple> results = query
                 .from(quser)
@@ -130,34 +104,15 @@ public class SQLDB implements Database {
                 .join(qProject).on(qProject.projectId.eq(quser.projectId))
                 .leftJoin(qdept2).on(qdept2.deptId.eq(quser.nextDeptId))
                 .where(quser.userId.eq(id.getId()))
-                .list(quser.firstName, quser.lastName, quser.intern, quser.profilePicURI, quser.uniqueProperty, quser.reportsTo, quser.email, quser.birthday, quser.tel, qEmployer.name, qEmployer.adress,
+                .list(quser.userId, quser.firstName, quser.lastName, quser.intern, quser.profilePicURI, quser.uniqueProperty, quser.reportsTo, quser.email, quser.birthday, quser.tel, qEmployer.name, qEmployer.adress,
                         qEmployer.city, qEmployer.iconURI, qdept.deptName, qdept.managerId, qdept2.deptName, qProject.name, qProject.projectId);
         if (results.size() > 0) {
             Tuple t = results.get(0);
 
-            AdvancedUserProfile advancedUserProfile = new AdvancedUserProfile(id, t.get(quser.firstName), t.get(quser.lastName), t.get(quser.email));
-            advancedUserProfile.setUniqueProperty(t.get(quser.uniqueProperty));
-            advancedUserProfile.setProfilePicURI(t.get(quser.profilePicURI));
-            Project proj = new Project(t.get(qProject.name));
-            advancedUserProfile.setProject(proj);
-            Employer empl = new Employer(t.get(qEmployer.name), t.get(qEmployer.adress), t.get(qEmployer.city), t.get(qEmployer.iconURI));
-            advancedUserProfile.setIntern(t.get(quser.intern));
-            advancedUserProfile.setEmployer(empl);
-            advancedUserProfile.setDept(new CC(t.get(qdept.deptName), new EID(t.get(qdept.managerId))));
-            advancedUserProfile.setReportsTo(new EID(t.get(quser.reportsTo)));
-            advancedUserProfile.setNextDept(t.get(qdept2.deptName));
+            AdvancedUserProfile advancedUserProfile = new AdvancedUserProfile(tupleToBasicUser(t));
             advancedUserProfile.setBirthday(t.get(quser.birthday).toString());
             advancedUserProfile.setTel(t.get(quser.tel));
-
-            List<Tuple> results2 = query
-                    .from(qSkill, qProjectSkills)
-                    .where(qProjectSkills.projectId.eq(t.get(qProject.projectId)))
-                    .where(qSkill.skillId.eq(qProjectSkills.skillId))
-                    .list(qSkill.name, qSkill.area);
-
-            for (Tuple t2 : results2) {
-                advancedUserProfile.getProject().addSkill(new Skill(t2.get(qSkill.name), t2.get(qSkill.area)));
-            }
+            advancedUserProfile.setEmail(t.get(quser.email));
             return advancedUserProfile;
         } else {
             return null;
@@ -235,27 +190,27 @@ public class SQLDB implements Database {
     }
 
     @Override
-    public HashMap<EID, BasicUserProfile> getDeptMembers(String dept) {
+    public HashMap<EID, BasicUserProfile> getDeptMembers(String dept) throws EIDFormatIncorrectException {
         SQLQuery query = createConnectionQuery();
-        QUsers qusers = new QUsers("u");
+        QUsers quser = new QUsers("u");
         QDepartments qdept = new QDepartments("d");
-        List<String> result = query
-                .from(qusers, qdept)
-                .where(qusers.deptId.eq(qdept.deptId))
-                .where(qdept.deptName.eq(dept))
-                .orderBy(qusers.lastName.asc())
-                .list(qusers.userId);
+        QEmployer qEmployer = new QEmployer("e");
+        QDepartments qdept2 = new QDepartments("d2");
+        QProject qProject = new QProject("p");
+        List<Tuple> result = query
+                .from(quser)
+                .join(qEmployer).on(qEmployer.employerId.eq(quser.employerId))
+                .join(qdept).on(qdept.deptId.eq(quser.deptId)).on(qdept.deptName.eq(dept))
+                .join(qProject).on(qProject.projectId.eq(quser.projectId))
+                .leftJoin(qdept2).on(qdept2.deptId.eq(quser.nextDeptId))
+                .list(quser.userId, quser.firstName, quser.lastName, quser.intern, quser.profilePicURI, quser.uniqueProperty, quser.reportsTo, qEmployer.name, qEmployer.adress,
+                        qEmployer.city, qEmployer.iconURI, qdept.deptName, qdept.managerId, qdept2.deptName, qProject.name, qProject.projectId);
 
         HashMap<EID, BasicUserProfile> map = new HashMap<>();
-        result.forEach(l -> {
-            try {
-                EID id = new EID(l);
-                BasicUserProfile user = getBasicUser(id);
-                map.put(id, user);
-            } catch (EIDFormatIncorrectException e) {
-                e.printStackTrace();
-            }
-        });
+        for (Tuple t : result) {
+            map.put(new EID(t.get(quser.userId)), tupleToBasicUser(t));
+        }
+
         return map;
     }
 
@@ -278,27 +233,93 @@ public class SQLDB implements Database {
     }
 
     @Override
-    public HashMap<EID, BasicUserProfile> getCompanyEmployees(String companyname) {
+    public HashMap<EID, BasicUserProfile> getCompanyEmployees(String companyname) throws EIDFormatIncorrectException {
         SQLQuery query = createConnectionQuery();
-        QUsers qusers = new QUsers("u");
+        QUsers quser = new QUsers("u");
         QEmployer qEmployer = new QEmployer("e");
-        List<String> result = query
-                .from(qusers, qEmployer)
-                .where(qusers.employerId.eq(qEmployer.employerId))
-                .where(qEmployer.name.eq(companyname))
-                .orderBy(qusers.lastName.asc())
-                .list(qusers.userId);
+        QDepartments qdept = new QDepartments("d");
+        QDepartments qdept2 = new QDepartments("d2");
+        QProject qProject = new QProject("p");
+        List<Tuple> result = query
+                .from(quser)
+                .join(qEmployer).on(qEmployer.employerId.eq(quser.employerId)).on(qEmployer.name.eq(companyname))
+                .join(qdept).on(qdept.deptId.eq(quser.deptId))
+                .join(qProject).on(qProject.projectId.eq(quser.projectId))
+                .leftJoin(qdept2).on(qdept2.deptId.eq(quser.nextDeptId))
+                .list(quser.userId, quser.firstName, quser.lastName, quser.intern, quser.profilePicURI, quser.uniqueProperty, quser.reportsTo, qEmployer.name, qEmployer.adress,
+                        qEmployer.city, qEmployer.iconURI, qdept.deptName, qdept.managerId, qdept2.deptName, qProject.name, qProject.projectId);
 
         HashMap<EID, BasicUserProfile> map = new HashMap<>();
-        result.forEach(d -> {
+        for (Tuple t : result) {
+            map.put(new EID(t.get(quser.userId)), tupleToBasicUser(t));
+        }
+        return map;
+    }
+
+    @Override
+    public ArrayList<BasicUserProfile> search(String searchstring) {
+        SQLQuery query = createConnectionQuery();
+        QUsers quser = new QUsers("u");
+        QEmployer qEmployer = new QEmployer("e");
+        QDepartments qdept = new QDepartments("d");
+        QDepartments qdept2 = new QDepartments("d2");
+        QProject qProject = new QProject("p");
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+        booleanBuilder.or(quser.lastName.like("%" + searchstring + "%"));
+        booleanBuilder.or(quser.firstName.like("%" + searchstring + "%"));
+        List<Tuple> result = query
+                .from(quser)
+                .join(qEmployer).on(qEmployer.employerId.eq(quser.employerId))
+                .join(qdept).on(qdept.deptId.eq(quser.deptId))
+                .join(qProject).on(qProject.projectId.eq(quser.projectId))
+                .leftJoin(qdept2).on(qdept2.deptId.eq(quser.nextDeptId))
+                .where(booleanBuilder)
+                .list(quser.userId, quser.firstName, quser.lastName, quser.intern, quser.profilePicURI, quser.uniqueProperty, quser.reportsTo, qEmployer.name, qEmployer.adress,
+                        qEmployer.city, qEmployer.iconURI, qdept.deptName, qdept.managerId, qdept2.deptName, qProject.name, qProject.projectId);
+
+        ArrayList<BasicUserProfile> list = new ArrayList<>();
+        result.forEach(t -> {
             try {
-                EID id = new EID(d);
-                BasicUserProfile user = getBasicUser(id);
-                map.put(id, user);
+                list.add(tupleToBasicUser(t));
             } catch (EIDFormatIncorrectException e) {
                 e.printStackTrace();
             }
         });
-        return map;
+        return list;
+    }
+
+    private BasicUserProfile tupleToBasicUser(Tuple t) throws EIDFormatIncorrectException {
+        SQLQuery query = createConnectionQuery();
+        QUsers quser = new QUsers("u");
+        QEmployer qEmployer = new QEmployer("e");
+        QDepartments qdept = new QDepartments("d");
+        QDepartments qdept2 = new QDepartments("d2");
+        QProject qProject = new QProject("p");
+        QSkill qSkill = new QSkill("sk");
+        QProjectSkills qProjectSkills = new QProjectSkills("qpss");
+
+        BasicUserProfile basicUserProfile = new BasicUserProfile(new EID(t.get(quser.userId)), t.get(quser.firstName), t.get(quser.lastName));
+        basicUserProfile.setUniqueProperty(t.get(quser.uniqueProperty));
+        basicUserProfile.setProfilePicURI(t.get(quser.profilePicURI));
+        Project proj = new Project(t.get(qProject.name));
+        basicUserProfile.setProject(proj);
+        Employer empl = new Employer(t.get(qEmployer.name), t.get(qEmployer.adress), t.get(qEmployer.city), t.get(qEmployer.iconURI));
+        basicUserProfile.setIntern(t.get(quser.intern));
+        basicUserProfile.setEmployer(empl);
+        basicUserProfile.setDept(new CC(t.get(qdept.deptName), new EID(t.get(qdept.managerId))));
+        basicUserProfile.setReportsTo(new EID(t.get(quser.reportsTo)));
+        basicUserProfile.setNextDept(t.get(qdept2.deptName));
+
+        List<Tuple> results2 = query
+                .from(qSkill, qProjectSkills)
+                .where(qProjectSkills.projectId.eq(t.get(qProject.projectId)))
+                .where(qSkill.skillId.eq(qProjectSkills.skillId))
+                .list(qSkill.name, qSkill.area);
+
+        for (Tuple t2 : results2) {
+            basicUserProfile.getProject().addSkill(new Skill(t2.get(qSkill.name), t2.get(qSkill.area)));
+        }
+
+        return basicUserProfile;
     }
 }

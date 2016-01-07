@@ -60,7 +60,12 @@ public class RESTDataService {
 
     @RequestMapping(value = "/ccmembers/{cc}", produces = {"application/json"})
     public HashMap<EID, BasicUserProfile> getMembers(@PathVariable("cc") String cc) {
-        return DataDAO.getInstance().getDeptMembers(cc);
+        try {
+            return DataDAO.getInstance().getDeptMembers(cc);
+        } catch (EIDFormatIncorrectException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public ArrayList<String> getCCs() {
@@ -85,9 +90,23 @@ public class RESTDataService {
     }
 
     @RequestMapping("/companyemployees/{companyname}")
-    public HashMap<EID, BasicUserProfile> getCompanyEmployees(@PathVariable("companyname") String companyname){
-        return DataDAO.getInstance().getCompanyEmployees(companyname);
+    public HashMap<EID, BasicUserProfile> getCompanyEmployees(@PathVariable("companyname") String companyname) {
+        try {
+            return DataDAO.getInstance().getCompanyEmployees(companyname);
+        } catch (EIDFormatIncorrectException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
+    @RequestMapping("/search/{searchstring}")
+    public ArrayList<BasicUserProfile> search(@PathVariable("searchstring") String search) {
+        return DataDAO.getInstance().search(search);
+    }
+
+    @RequestMapping("/search/")
+    public ArrayList<BasicUserProfile> searchNullValue() {
+        return null;
+    }
 
 }

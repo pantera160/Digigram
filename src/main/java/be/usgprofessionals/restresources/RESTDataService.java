@@ -28,6 +28,7 @@ public class RESTDataService {
 
     @RequestMapping("/basic/{EID}")
     public BasicUserProfile getBasicUser(@PathVariable String EID) {
+
         try {
             EID eid = new EID(EID);
             return DataDAO.getInstance().getBasicFromEID(eid);
@@ -80,7 +81,7 @@ public class RESTDataService {
     public HashMap<String, String> test() {
         HashMap<String, String> testmap = new HashMap<>();
         testmap.put("what?", "a test");
-        testmap.put("seems", "it worked");
+        testmap.put("seems", "it worked fine");
         return testmap;
     }
 

@@ -6,6 +6,7 @@ import be.usgprofessionals.POJOs.BasicUserProfile;
 import be.usgprofessionals.POJOs.Employer;
 import be.usgprofessionals.Utils.EID;
 import be.usgprofessionals.controllers.DataDAO;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,6 +19,7 @@ import java.util.HashMap;
  * <p>
  * Digigram for USG Professionals
  */
+@CrossOrigin
 @RestController
 @RequestMapping("/data")
 public class RESTDataService {

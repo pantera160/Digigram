@@ -2,6 +2,7 @@ package be.usgprofessionals.Utils;
 
 import be.usgprofessionals.Exceptions.EIDFormatIncorrectException;
 
+
 /**
  * Created by Thomas Straetmans on 17/11/15.
  * <p>
